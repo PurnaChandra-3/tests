@@ -1,0 +1,25 @@
+from django.test import TestCase
+from myapp.models import Product, Category
+
+class ProductModelTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create a Category instance
+        cls.category = Category.objects.create(name="Electronics")
+
+        # Create Product instances under the "Electronics" category
+        Product.objects.create(name="Product A", description="Description A", price=99.99, stock=20, category=cls.category)
+        Product.objects.create(name="Product B", description="Description B", price=199.99, stock=15, category=cls.category)
+
+    def test_find_product_by_category(self):
+        # Retrieve products by category
+        products = Product.objects.filter(category=self.category)
+
+        # Check that the correct number of products is returned
+        self.assertEqual(products.count(), 2)
+
+        # Optionally check the content of the products
+        product_names = [product.name for product in products]
+        self.assertIn("Product A", product_names)
+        self.assertIn("Product B", product_names)
