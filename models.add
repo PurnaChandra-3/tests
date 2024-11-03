@@ -1,0 +1,24 @@
+from django.test import TestCase
+from myapp.models import Product
+
+class ProductModelTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create multiple Product instances
+        Product.objects.create(name="Product 1", description="Description 1", price=19.99, stock=10)
+        Product.objects.create(name="Product 2", description="Description 2", price=29.99, stock=20)
+        Product.objects.create(name="Product 3", description="Description 3", price=39.99, stock=30)
+
+    def test_list_all_products(self):
+        # Retrieve all products from the database
+        products = Product.objects.all()
+
+        # Check that the correct number of products is returned
+        self.assertEqual(products.count(), 3)
+
+        # Optionally check the content of the products
+        product_names = [product.name for product in products]
+        self.assertIn("Product 1", product_names)
+        self.assertIn("Product 2", product_names)
+        self.assertIn("Product 3", product_names)
